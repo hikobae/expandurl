@@ -72,9 +72,9 @@ mod tests {
         assert_eq!(expand_numbers("000-000"), Ok(["000"].iter().map(|&s| s.into()).collect()));
         assert_eq!(expand_numbers("100-101"), Ok(["100", "101"].iter().map(|&s| s.into()).collect()));
         assert_eq!(expand_numbers("2-1"), Err(ExpandError::InvalidRange));
-        // assert_eq!(expand_numbers("a-b"), Err(ExpandError::ParseError));
-        // assert_eq!(expand_numbers("a"), Err(ExpandError::ParseError));
-        // assert_eq!(expand_numbers("3"), Err(ExpandError::ParseError));
+        assert!(matches!(expand_numbers("a-b"), Err(ExpandError::ParseError(_))));
+        assert_eq!(expand_numbers("a"), Err(ExpandError::InvalidArgs));
+        assert_eq!(expand_numbers("3"), Err(ExpandError::InvalidArgs));
     }
 
     #[test]
