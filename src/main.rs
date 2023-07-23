@@ -58,27 +58,32 @@ fn main() {
     };
 }
 
-#[test]
-fn expand_numbers_test() {
-    assert_eq!(expand_numbers("3-5"), Ok(["3", "4", "5"].iter().map(|&s| s.into()).collect()));
-    assert_eq!(expand_numbers("1-1"), Ok(["1"].iter().map(|&s| s.into()).collect()));
-    assert_eq!(expand_numbers("01-03"), Ok(["01", "02", "03"].iter().map(|&s| s.into()).collect()));
-    assert_eq!(expand_numbers("09-10"), Ok(["09", "10"].iter().map(|&s| s.into()).collect()));
-    assert_eq!(expand_numbers("001-001"), Ok(["001"].iter().map(|&s| s.into()).collect()));
-    assert_eq!(expand_numbers("000-000"), Ok(["000"].iter().map(|&s| s.into()).collect()));
-    assert_eq!(expand_numbers("100-101"), Ok(["100", "101"].iter().map(|&s| s.into()).collect()));
-    assert_eq!(expand_numbers("2-1"), Err(ExpandError::InvalidRange));
-    // assert_eq!(expand_numbers("a-b"), Err(ExpandError::ParseError));
-    // assert_eq!(expand_numbers("a"), Err(ExpandError::ParseError));
-    // assert_eq!(expand_numbers("3"), Err(ExpandError::ParseError));
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn expand_one_test() {
-    assert_eq!(expand_one("http://example.com/img[1-2]s.jpg"), Ok(["http://example.com/img1s.jpg", "http://example.com/img2s.jpg"].iter().map(|&s| s.into()).collect()));
-}
+    #[test]
+    fn expand_numbers_test() {
+        assert_eq!(expand_numbers("3-5"), Ok(["3", "4", "5"].iter().map(|&s| s.into()).collect()));
+        assert_eq!(expand_numbers("1-1"), Ok(["1"].iter().map(|&s| s.into()).collect()));
+        assert_eq!(expand_numbers("01-03"), Ok(["01", "02", "03"].iter().map(|&s| s.into()).collect()));
+        assert_eq!(expand_numbers("09-10"), Ok(["09", "10"].iter().map(|&s| s.into()).collect()));
+        assert_eq!(expand_numbers("001-001"), Ok(["001"].iter().map(|&s| s.into()).collect()));
+        assert_eq!(expand_numbers("000-000"), Ok(["000"].iter().map(|&s| s.into()).collect()));
+        assert_eq!(expand_numbers("100-101"), Ok(["100", "101"].iter().map(|&s| s.into()).collect()));
+        assert_eq!(expand_numbers("2-1"), Err(ExpandError::InvalidRange));
+        // assert_eq!(expand_numbers("a-b"), Err(ExpandError::ParseError));
+        // assert_eq!(expand_numbers("a"), Err(ExpandError::ParseError));
+        // assert_eq!(expand_numbers("3"), Err(ExpandError::ParseError));
+    }
 
-#[test]
-fn expand_url_test() {
-    assert_eq!(expand_url("http://example.com/img[1-2][3-4]s.jpg"), Ok(["http://example.com/img13s.jpg", "http://example.com/img14s.jpg", "http://example.com/img23s.jpg", "http://example.com/img24s.jpg"].iter().map(|&s| s.into()).collect()));
+    #[test]
+    fn expand_one_test() {
+        assert_eq!(expand_one("http://example.com/img[1-2]s.jpg"), Ok(["http://example.com/img1s.jpg", "http://example.com/img2s.jpg"].iter().map(|&s| s.into()).collect()));
+    }
+
+    #[test]
+    fn expand_url_test() {
+        assert_eq!(expand_url("http://example.com/img[1-2][3-4]s.jpg"), Ok(["http://example.com/img13s.jpg", "http://example.com/img14s.jpg", "http://example.com/img23s.jpg", "http://example.com/img24s.jpg"].iter().map(|&s| s.into()).collect()));
+    }
 }
