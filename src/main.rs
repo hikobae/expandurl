@@ -52,7 +52,10 @@ fn renban(s: &str) -> Result<Vec<String>, RenbanError> {
 }
 
 fn main() {
-    let input: String = std::env::args().nth(1).unwrap();
+    let input: String = match std::env::args().nth(1) {
+        Some(s) => s,
+        None => return,
+    };
 
     let mut out = BufWriter::new(stdout().lock());
     let new_line = "\n".as_bytes();
