@@ -38,8 +38,8 @@ fn renban1range(s: &str) -> Result<Vec<String>, RenbanError> {
     Ok(create_renban(middle)?.iter().map(|n| left.to_owned() + n + right).collect())
 }
 
-fn renban(url: &str) -> Result<Vec<String>, RenbanError> {
-    let list = renban1range(url)?;
+fn renban(s: &str) -> Result<Vec<String>, RenbanError> {
+    let list = renban1range(s)?;
     if list.first().unwrap().find('[').is_none() {
         return Ok(list);
     }
@@ -52,19 +52,19 @@ fn renban(url: &str) -> Result<Vec<String>, RenbanError> {
 }
 
 fn main() {
-    let url: String = std::env::args().nth(1).unwrap();
+    let input: String = std::env::args().nth(1).unwrap();
 
     let mut out = BufWriter::new(stdout().lock());
     let new_line = "\n".as_bytes();
-    match renban(&url) {
-        Ok(url_list) => {
-            for i in url_list {
+    match renban(&input) {
+        Ok(list) => {
+            for i in list {
                 out.write(i.as_bytes()).unwrap();
                 out.write(new_line).unwrap();
             }
         },
         Err(_e) => {
-            out.write(url.as_bytes()).unwrap();
+            out.write(input.as_bytes()).unwrap();
         },
     };
 }
