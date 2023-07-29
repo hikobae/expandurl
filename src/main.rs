@@ -1,3 +1,4 @@
+use std::io::{stdout, Write, BufWriter};
 use std::num::ParseIntError;
 
 #[derive(Debug)]
@@ -52,9 +53,19 @@ fn renban(url: &str) -> Result<Vec<String>, RenbanError> {
 
 fn main() {
     let url: String = std::env::args().nth(1).unwrap();
+
+    let mut out = BufWriter::new(stdout().lock());
+    let new_line = "\n".as_bytes();
     match renban(&url) {
-        Ok(url_list) => print!("{}", url_list.join("\n")),
-        Err(_e) => print!("{}", url),
+        Ok(url_list) => {
+            for i in url_list {
+                out.write(i.as_bytes()).unwrap();
+                out.write(new_line).unwrap();
+            }
+        },
+        Err(_e) => {
+            out.write(url.as_bytes()).unwrap();
+        },
     };
 }
 
